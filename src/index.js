@@ -39,17 +39,19 @@ client.on('message', message => {
 		return
 
 	// separate the command into the command name, and an array of any provided arguments
-	const [ commandName, ...args ] = message.content
+	const args = message.content
 		.slice(prefix.length)
 		.trim()
 		.split(/\s+/)
+	const commandName = args.shift().toLowerCase()
+
+	// retrieve the desired command object (or look for aliases)
+	const command = client.commands.get(commandName)
+		|| client.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName))
 
 	// exit if the command doesn't exist
-	if (!client.commands.has(commandName))
+	if (!command)
 		return message.channel.send('Command not found.')
-
-	// retrieve the desired command object
-	const command = client.commands.get(commandName.toLowerCase())
 
 	// exit if...
 	// ...the invoked command requires args
