@@ -53,6 +53,14 @@ client.on('message', message => {
 	if (!command)
 		return message.channel.send('Command not found.')
 
+	// exit if author doesn't have the required permissions to issue the command
+	if (command.permissions) {
+		const authorPerms = message.channel.permissionsFor(message.author)
+
+		if (!authorPerms || !authorPerms.has(command.permissions))
+			return message.channel.reply('you don\'t have the permissions to use this command!')
+	}
+
 	// exit if...
 	// ...the invoked command requires args
 	// ...and no arguments were supplied in the sent message
