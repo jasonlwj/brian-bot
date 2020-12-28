@@ -10,7 +10,7 @@ const client = new Discord.Client()
 client.commands = new Discord.Collection()
 
 // will contain cooldowns for each command
-const cooldowns = new Discord.Collection()
+client.cooldowns = new Discord.Collection()
 
 // obtain the command files from ./commands
 const commandDir = path.join(__dirname, 'commands')
@@ -19,7 +19,7 @@ const commandFiles = fs.readdirSync(commandDir).filter(file => file.endsWith('.j
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`)
 	client.commands.set(command.name, command)
-	cooldowns.set(command.name, new Discord.Collection())
+	client.cooldowns.set(command.name, new Discord.Collection())
 }
 
 // when the client is ready to start working
@@ -34,7 +34,7 @@ client.on('message', message => {
 
 	// exit if the message...
 	// ...isn't a command i.e. doesn't start with the prefix
-	// ...was sent by a bot
+	// ...or was sent by a bot
 	if (!message.content.startsWith(prefix) || message.author.bot)
 		return
 
@@ -53,7 +53,7 @@ client.on('message', message => {
 
 	// exit if...
 	// ...the invoked command requires args
-	// ...no arguments were supplied in the sent message
+	// ...and no arguments were supplied in the sent message
 	if (command.args && !args.length) {
 		let reply = `You didn't provide any arguments, ${message.author}!`
 
@@ -63,8 +63,9 @@ client.on('message', message => {
 		return message.channel.send(reply)
 	}
 
+	// calculate cooldowns for the obtained command
 	const now = Date.now()
-	const timestamps = cooldowns.get(command.name)
+	const timestamps = client.cooldowns.get(command.name)
 	const cooldownAmount = (command.cooldown || 3) * 1000
 
 	// exit if the command being issued is on cooldown for the current user
