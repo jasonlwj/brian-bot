@@ -5,7 +5,6 @@ module.exports = {
 	description: 'List all of my commands or info about a specific command.',
 	aliases: ['commands'],
 	usage: '[command name]',
-	cooldown: 5,
 	execute: (message, args) => {
 		const replyMessage = []
 		const { commands } = message.client
@@ -20,8 +19,9 @@ module.exports = {
 			const commandName = args[0].toLowerCase()
 			const command = commands.get(commandName)
 
-			if (!command)
+			if (!command) {
 				return message.reply('that\'s not a valid command!')
+			}
 
 			replyMessage.push(`**Name:** ${command.name}`)
 
