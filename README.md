@@ -1,6 +1,6 @@
 # brian-bot
 
-BrianBot is a Discord bot built using [discordjs](https://github.com/discordjs/discord.js/). It emulates the "Brian" text-to-speech voice used by many popular streamers on Twitch. This bot makes use of the Amazon Polly service to convert user-supplied text into audio containing the synthesized speech.
+BrianBot is a Discord bot built using [discordjs](https://github.com/discordjs/discord.js/). It emulates the "Brian" text-to-speech voice used by many popular streamers on Twitch. This bot makes use of the [Amazon Polly](https://aws.amazon.com/polly/) service to convert user-supplied text into audio containing the synthesized speech.
 
 ## Usage
 `!help`
